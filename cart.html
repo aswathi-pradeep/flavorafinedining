@@ -1,186 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Cart</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="/css/cart.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Restaurant - Cart</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+body {padding-top: 80px;}
+.card img {height:100px; object-fit:cover;}
+</style>
 </head>
-<body class="p-4">
+<body>
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg fixed-top bg-dark">
-    <div class="container">
-        <a class="navbar-brand text-white" href="#"><strong>FLAVORA FINE DINING</strong></a>
-
-        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-end" id="navMenu">
-             <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="about-us.html">About Us</a></li>
-        <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
-        <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="wishlist.html">❤️ <span id="wishlist-count">0</span></a></li>
-        <li class="nav-item"><a class="nav-link" href="cart.html">🛒 <span id="cart-count">0</span></a></li>
-      </ul>
-        </div>
+<nav class="navbar navbar-expand-lg fixed-top bg-dark navbar-dark">
+<div class="container">
+    <a class="navbar-brand text-white" href="index.html"><strong>FLAVORA FINE DINING</strong></a>
+    <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="about-us.html">About Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+            <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="wishlist.html">❤️ <span id="wishlist-count">0</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="cart.html">🛒 <span id="cart-count">0</span></a></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">👤</a>
+                <ul class="dropdown-menu dropdown-menu-end" id="userDropdown">
+                    <!-- Filled by JS -->
+                </ul>
+            </li>
+        </ul>
     </div>
+</div>
 </nav>
 
-<h2 class="mb-4 mt-5 pt-4">🛒 Your Cart</h2>
-<div id="cartContainer"></div>
+<div class="container mt-5 pt-4">
+<h2>Your Cart 🛒</h2>
+<div class="row" id="cartContainer"></div>
+<hr>
+<h4>Total: ₹<span id="totalAmount">0</span></h4>
+<button id="checkoutBtn" class="btn btn-success mt-3">Checkout</button>
+</div>
 
 <script>
 const API = "http://localhost:3000/products";
-
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
-let wishlistHistory = JSON.parse(localStorage.getItem("wishlistHistory")) || [];
 
-// 🔥 Update navbar counts
-function updateNavbarCounts() {
+// Navbar counts
+function updateNavbarCount() {
     document.getElementById("wishlist-count").textContent = wishlist.length;
-    document.getElementById("cart-count").textContent = cart.length;
+    document.getElementById("cart-count").textContent = cart.reduce((a,b)=>a+b.qty,0);
 }
 
-updateNavbarCounts();
-
-// Load cart items from API
+// Load cart items with full product info
 async function loadCart() {
     const res = await fetch(API);
     const products = await res.json();
 
-    if(cart.length === 0){
-        document.getElementById("cartContainer").innerHTML = "<h3 class='text-center'>Your cart is empty 🛒</h3>";
-        return;
-    }
-
     const cartItems = cart.map(c => {
-        const p = products.find(x => x.id == c.id);
-        return {...p, qty: c.qty};
-    });
+        const product = products.find(p => Number(p.id) === Number(c.id));
+        if(product) return {...product, qty: c.qty};
+    }).filter(Boolean);
 
     displayCart(cartItems);
 }
 
 // Display cart items
 function displayCart(items) {
-    let grandTotal = 0;
-    let html = `
-        <table class="table">
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Qty</th>
-                <th>Total</th>
-                <th>Action</th>
-            </tr>`;
+    const container = document.getElementById("cartContainer");
+    container.innerHTML = "";
+    let total = 0;
+
+    if(items.length === 0){
+        container.innerHTML = "<h4 class='text-center text-muted'>Your cart is empty 🛒</h4>";
+        document.getElementById("totalAmount").textContent = 0;
+        return;
+    }
 
     items.forEach(item => {
-        const total = item.price * item.qty;
-        grandTotal += total;
+        total += item.price * item.qty;
 
-        html += `
-            <tr>
-                <td><img src="${item.image}" width="80"></td>
-                <td>${item.name}</td>
-                <td>₹${item.price}</td>
-                <td>
-                    <button class="btn btn-sm btn-secondary minus" data-id="${item.id}">-</button>
-                    <span class="mx-2">${item.qty}</span>
-                    <button class="btn btn-sm btn-secondary plus" data-id="${item.id}">+</button>
-                </td>
-                <td>₹${total}</td>
-                <td><button class="btn btn-danger remove" data-id="${item.id}">Remove</button></td>
-            </tr>`;
-    });
-
-    html += `
-        <tr>
-            <td colspan="4" class="text-end"><strong>Grand Total:</strong></td>
-            <td><strong>₹${grandTotal}</strong></td>
-            <td></td>
-        </tr>
-        </table>
-
-        <div class="text-end mt-3">
-            <h4>Total Payable: ₹${grandTotal}</h4>
-            <button class="btn btn-success mt-2" id="payBtn">Proceed to Payment</button>
+        container.innerHTML += `
+        <div class="col-md-6 mb-3">
+            <div class="card p-2 shadow d-flex flex-row align-items-center">
+                <img src="${item.image}" class="me-3">
+                <div>
+                    <h5>${item.name}</h5>
+                    <p>₹${item.price} x ${item.qty}</p>
+                    <button class="btn btn-danger remove-btn" data-id="${item.id}">Remove</button>
+                    <button class="btn btn-secondary increase-btn" data-id="${item.id}">+</button>
+                    <button class="btn btn-secondary decrease-btn" data-id="${item.id}">-</button>
+                </div>
+            </div>
         </div>`;
+    });
 
-    document.getElementById("cartContainer").innerHTML = html;
-
+    document.getElementById("totalAmount").textContent = total;
     setupCartButtons();
-    setupPayment(grandTotal);
+    updateNavbarCount();
 }
 
-// Button actions
+// Setup remove/increase/decrease buttons
 function setupCartButtons() {
-    document.querySelectorAll(".plus").forEach(btn => {
+    document.querySelectorAll(".remove-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const id = Number(btn.dataset.id);
-            const item = cart.find(x => x.id === id);
-            item.qty++;
-            saveCart();
+            cart = cart.filter(c=>c.id!==id);
+            localStorage.setItem("cart", JSON.stringify(cart));
             loadCart();
         });
     });
 
-    document.querySelectorAll(".minus").forEach(btn => {
+    document.querySelectorAll(".increase-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const id = Number(btn.dataset.id);
-            const item = cart.find(x => x.id === id);
-
-            if(item.qty > 1) item.qty--;
-            else cart = cart.filter(x => x.id !== id);
-
-            saveCart();
-            loadCart();
+            const item = cart.find(c=>c.id===id);
+            if(item){ item.qty++; localStorage.setItem("cart", JSON.stringify(cart)); loadCart();}
         });
     });
 
-    document.querySelectorAll(".remove").forEach(btn => {
+    document.querySelectorAll(".decrease-btn").forEach(btn => {
         btn.addEventListener("click", () => {
             const id = Number(btn.dataset.id);
-            const product = cart.find(x => x.id === id);
-            cart = cart.filter(x => x.id !== id);
-
-            wishlistHistory.push(`Removed from cart: ${product.name}`);
-            localStorage.setItem("wishlistHistory", JSON.stringify(wishlistHistory));
-
-            saveCart();
-            loadCart();
+            const item = cart.find(c=>c.id===id);
+            if(item){
+                if(item.qty>1){ item.qty--; }
+                else { cart = cart.filter(c=>c.id!==id); }
+                localStorage.setItem("cart", JSON.stringify(cart));
+                loadCart();
+            }
         });
     });
 }
 
-// Save cart to localStorage
-function saveCart() {
+// Checkout
+document.getElementById("checkoutBtn").addEventListener("click", () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    if(!currentUser){
+        Swal.fire({
+            icon:"error",
+            title:"Login Required",
+            text:"You must login to checkout!"
+        });
+         window.location.hre='login.html';
+        return;
+       
+    }
+    if(cart.length===0){
+        Swal.fire({
+            icon:"info",
+            title:"Cart Empty",
+            text:"Please add items to cart first!"
+        });
+        return;
+    }
+    Swal.fire({
+        icon:"success",
+        title:"Order Placed",
+        text:"Thank you for your purchase!"
+    });
+    cart = [];
     localStorage.setItem("cart", JSON.stringify(cart));
-    updateNavbarCounts();
-}
+    loadCart();
+});
 
-// Payment simulation
-function setupPayment(amount){
-    const btn = document.getElementById("payBtn");
-    if(!btn) return;
+// User dropdown
+document.addEventListener("DOMContentLoaded", () => {
+    const dropdown = document.getElementById("userDropdown");
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-    btn.addEventListener("click", () => {
-        alert(`Payment Successful!\n\nAmount Paid: ₹${amount}\n\nThank you for your purchase ❤️`);
-        cart = [];
-        saveCart();
-        loadCart();
-    });
-}
+    if(currentUser){
+        dropdown.innerHTML = `
+            <li><a class="dropdown-item disabled">👤 Hello, ${currentUser.name}</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">Logout</a></li>
+        `;
+        document.getElementById("logoutBtn").addEventListener("click", ()=>{
+            localStorage.removeItem("currentUser");
+            location.reload();
+        });
+    } else {
+        dropdown.innerHTML = `
+            <li><a class="dropdown-item" href="login.html">Login</a></li>
+            <li><a class="dropdown-item" href="signup.html">Signup</a></li>
+        `;
+    }
 
-loadCart();
+    updateNavbarCount();
+    loadCart();
+});
+
+// Highlight active navbar link
+const currentPage = location.pathname.split("/").pop();
+document.querySelectorAll(".nav-link").forEach(link => {
+    if(link.getAttribute("href") === currentPage){ link.classList.add("active"); }
+});
 </script>
 
 </body>

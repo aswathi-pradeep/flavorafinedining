@@ -4,101 +4,91 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
     <link rel="stylesheet" href="/css/login.css">
-    <script src="/js/login.js"></script>
-   <style>
-     .error{
-        color: red;
-        font-size: 12px;
-     }
-     #error{
-        text-align: center;
-     }
-   </style>
+
+    <style>
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+
+        #error {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
+
     <div class="login-container">
         <h2>Login</h2>
-    <form id='loginform' action="">
-        <div>
-        <input id="emailInput" type="text" placeholder="enter your email"> 
-         <div class="error" id="emailError"></div>
-        </div>
 
-         <div>
-        <input id="passwordInput" type="text" placeholder="enter password">
-        <div class="error" id="passwordError"></div>
-         </div>
+        <form id='loginform'>
+            <div>
+                <input id="emailInput" type="text" placeholder="Enter your email">
+                <div class="error" id="emailError"></div>
+            </div>
 
-        <div>
-        <button type="submit">Login</button>
-        <div id="error" class="error"></div>
-        <p>Don't have an account? <a href="/sign-up.html">Sign Up</a></p>
+            <div>
+                <input id="passwordInput" type="password" placeholder="Enter password">
+                <div class="error" id="passwordError"></div>
+            </div>
+
+            <button type="submit">Login</button>
+            <div id="error" class="error"></div>
+
+            <p>Don't have an account? <a href="/sign-up.html">Sign Up</a></p>
+        </form>
     </div>
-   </form>
-    </div>
-    
-    
+
 
     <script>
-      let emailInput=document.getElementById('emailInput');
-      let passwordInput=document.getElementById('passwordInput');
+        let emailInput = document.getElementById('emailInput');
+        let passwordInput = document.getElementById('passwordInput');
 
-      let emailError=document.getElementById('emailError');
-      let passwordError=document.getElementById('passwordError');
+        let emailError = document.getElementById('emailError');
+        let passwordError = document.getElementById('passwordError');
 
-
-      document.getElementById('loginform').addEventListener('submit', (e) => {
+        document.getElementById('loginform').addEventListener('submit', (e) => {
             e.preventDefault();
-            let email = document.getElementById('emailInput').value.trim();
-            let password = document.getElementById('passwordInput').value.trim();
-            let users = JSON.parse(localStorage.getItem('users'))
+
+            let email = emailInput.value.trim();
+            let password = passwordInput.value.trim();
+
+            let users = JSON.parse(localStorage.getItem('users')) || [];
 
             let validUser = users.find(u => u.email === email && u.password === password);
 
             if (validUser) {
                 alert("Login successful!");
-                
-                localStorage.setItem('currentUser', JSON.stringify(validUser));
 
-                 
+                // ----------------------------
+                // 🔥 IMPORTANT FIX:
+                // Save login status
+                // ----------------------------
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("currentUser", JSON.stringify(validUser));
+
                 window.location.href = "index.html";
             } else {
-                document.getElementById('error').textContent = "Incorrect email id or password!";
+                document.getElementById('error').textContent = "Incorrect email or password!";
             }
+        });
 
-        })
+        // Email validation
+        emailInput.addEventListener('input', () => {
+            let email = emailInput.value.trim();
+            emailError.textContent = email ? "" : "Invalid email";
+        });
 
-      emailInput.addEventListener('input',validateEmail);
-      passwordInput.addEventListener('input',validatePassword);
-
-      function validateEmail(){
-        const email=emailInput.value.trim();
-        if(email===''){
-            emailError.textContent='invalid email'
-            return false;
-        }
-        emailError.textContent="";
-            return true;
-        
-
-      }
-       function validatePassword(){
-        const password=passwordInput.value.trim();
-         if(password===''){
-            passwordError.textContent='invalid password'
-            return false;
-        }
-            passwordError.textContent="";
-            return true;
-      }
-
-
-      
+        // Password validation
+        passwordInput.addEventListener('input', () => {
+            let password = passwordInput.value.trim();
+            passwordError.textContent = password ? "" : "Invalid password";
+        });
     </script>
-    
+
 </body>
 
 </html>

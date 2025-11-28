@@ -13,27 +13,34 @@
 <body>
 
 <!-- ---------- NAVBAR ---------- -->
-<nav class="navbar navbar-expand-lg fixed-top">
+<nav class="navbar navbar-expand-lg fixed-top bg-dark navbar-dark">
     <div class="container">
-        <a class="navbar-brand text-white" href="#"><strong>FLAVORA FINE DINING</strong></a>
+        <a class="navbar-brand text-white" href="index.html"><strong>FLAVORA FINE DINING</strong></a>
 
         <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse justify-content-end"  id="navMenu">
-           <ul class="navbar-nav ms-auto">
-        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="about-us.html">About Us</a></li>
-        <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
-        <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="wishlist.html">❤️ <span id="wishlist-count">0</span></a></li>
-        <li class="nav-item"><a class="nav-link" href="cart.html">🛒 <span id="cart-count">0</span></a></li>
-      </ul>
+        <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="about-us.html">About Us</a></li>
+                <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+                <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="wishlist.html">❤️ <span id="wishlist-count">0</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="cart.html">🛒 <span id="cart-count">0</span></a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="userMenu" role="button" data-bs-toggle="dropdown">👤</a>
+                    <ul class="dropdown-menu dropdown-menu-end" id="userDropdown">
+                        <!-- Filled by JS -->
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>
+
 
 
 
@@ -213,6 +220,39 @@ var swiper = new Swiper(".mySwiper", {
         clickable: true,
     },
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const dropdown = document.getElementById("userDropdown");
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    if (currentUser) {
+        // User is logged in
+        dropdown.innerHTML = `
+            <li><a class="dropdown-item disabled">👤 Hello, ${currentUser.name}</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">Logout</a></li>
+        `;
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            localStorage.removeItem("currentUser");
+            window.location.reload();
+        });
+    } else {
+        // User not logged in
+        dropdown.innerHTML = `
+            <li><a class="dropdown-item" href="login.html">Login</a></li>
+            <li><a class="dropdown-item" href="signup.html">Signup</a></li>
+        `;
+    }
+
+    
+    const wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    document.getElementById("wishlist-count").textContent = wishlist.length;
+    document.getElementById("cart-count").textContent = cart.length;
+});
+
+
 </script>
 <script src="/js/navbar.js"></script>
 

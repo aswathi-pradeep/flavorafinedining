@@ -1,0 +1,217 @@
+ body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+            background: #fff;
+        }
+
+       /* Navbar base */
+.navbar {
+    background-color: #1a1a1a; /* dark background */
+    padding: 0.8rem 1rem;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+/* Brand */
+.navbar .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Nav links */
+.navbar .nav-link {
+    color: #fff;
+    margin-left: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ff6b6b; /* highlight on hover */
+}
+
+/* Active link */
+.navbar .nav-link.active {
+    color: #ff6b6b;
+    font-weight: 700;
+    border-bottom: 2px solid #ff6b6b;
+    padding-bottom: 0.2rem;
+}
+
+/* Wishlist & Cart icons */
+.navbar .nav-link span {
+    background: #ff6b6b;
+    color: #fff;
+    padding: 0 0.4rem;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    margin-left: 0.3rem;
+    font-weight: bold;
+}
+
+/* Navbar collapse button for mobile */
+.navbar .navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar .navbar-toggler-icon {
+    background-color: #fff;
+    width: 30px;
+    height: 3px;
+    display: block;
+    position: relative;
+}
+
+.navbar .navbar-toggler-icon::before,
+.navbar .navbar-toggler-icon::after {
+    content: "";
+    width: 30px;
+    height: 3px;
+    background-color: #fff;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s;
+}
+
+.navbar .navbar-toggler-icon::before {
+    top: -10px;
+}
+
+.navbar .navbar-toggler-icon::after {
+    top: 10px;
+}
+
+
+
+        .secondPart{
+            background-image: url('/image/image51.avif');
+            background-size: cover;
+           
+            background-repeat: no-repeat;
+            height: 500px;
+           
+        }
+        .secondPart h1{
+            text-align: center;
+            color:white;
+            padding-top: 250px;
+
+        }
+        .secondPart a{
+            text-decoration: none;
+            color:white;
+            align-items: center;
+            font-size: 12px;
+            padding: 450px 0px 0px 720px;
+
+        }
+
+        @media (max-width:768px) {
+            .secondPart{
+                height: 400px;
+            }
+            .secondPart h1{
+                padding-top: 200px;
+            }
+            .secondPart a{
+                padding-left: 350px;
+            }
+        }
+
+
+
+        body{
+    
+    font-family: Arial;
+    
+}
+
+.gallery{
+    padding: 100px 0;
+}
+
+.container{
+    width: 80%;
+    max-width: 1300px;
+    margin: auto;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+.item{
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.item img{
+    width: 500px;
+    height: 400px;
+    object-fit: cover;
+    display: block;
+    transition: 0.4s;
+}
+
+
+
+.item:hover img{
+    transform: scale(1.05);
+}
+
+
+
+
+@media(max-width:768px){
+    .grid{
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width:480px){
+    .grid{
+        grid-template-columns: repeat(1, 1fr);
+    }
+}
+  
+.footer-bg{
+  background-color: #28292a;;
+ }
+
+.footer-First{
+    padding: 80px;
+    text-align: center;
+    font-size: small;
+}
+.footer-First h5,h6{
+  color: white;
+}
+.footer-First p,a{
+  color: gainsboro;
+}
+.footer-First a{
+    text-decoration: none;
+}
+
+.footer-second{
+    padding:30px;
+
+}
+.footer-second a{
+    font-weight: bold;
+    font-size: 12px;
+    text-decoration: none;
+    padding-left: 30px;
+
+}
+.footer-second p{
+    color: gainsboro;
+    margin-top: 5px;
+    font-size: 12px;
+}

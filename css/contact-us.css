@@ -1,0 +1,270 @@
+ body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+        }
+
+        /* ---------- NAVBAR STYLING ---------- */
+      /* Navbar base */
+.navbar {
+    background-color: #1a1a1a; /* dark background */
+    padding: 0.8rem 1rem;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+/* Brand */
+.navbar .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Nav links */
+.navbar .nav-link {
+    color: #fff;
+    margin-left: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ff6b6b; /* highlight on hover */
+}
+
+/* Active link */
+.navbar .nav-link.active {
+    color: #ff6b6b;
+    font-weight: 700;
+    border-bottom: 2px solid #ff6b6b;
+    padding-bottom: 0.2rem;
+}
+
+/* Wishlist & Cart icons */
+.navbar .nav-link span {
+    background: #ff6b6b;
+    color: #fff;
+    padding: 0 0.4rem;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    margin-left: 0.3rem;
+    font-weight: bold;
+}
+
+/* Navbar collapse button for mobile */
+.navbar .navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar .navbar-toggler-icon {
+    background-color: #fff;
+    width: 30px;
+    height: 3px;
+    display: block;
+    position: relative;
+}
+
+.navbar .navbar-toggler-icon::before,
+.navbar .navbar-toggler-icon::after {
+    content: "";
+    width: 30px;
+    height: 3px;
+    background-color: #fff;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s;
+}
+
+.navbar .navbar-toggler-icon::before {
+    top: -10px;
+}
+
+.navbar .navbar-toggler-icon::after {
+    top: 10px;
+}
+
+        
+        
+
+
+.bg-img1{
+    background-image: url("/image/nwar-igbariah-tHbWtMFzZZs-unsplash.jpg");
+    height: 500px;
+    background-size: cover;
+    text-align: center;
+    color: white;
+}
+.bg-img1 h1{
+   padding-top: 250px;
+   font-family: "Poppins", sans-serif;
+   font-size: 55px;
+}
+.bg-img1 a{
+    text-decoration: none;
+     color: white;
+    
+    
+}
+/* ------------------------------------contact part-------------------------------------- */
+
+ body{
+            font-family: Arial, sans-serif;
+        }
+
+    
+        main p{
+            text-align: center;
+            color: black;
+        }
+        .contact-box{
+            background:#f8f9fa;
+            padding:15px;
+            border-radius:8px;
+            margin-bottom:20px;
+            transition:0.3s;
+
+        }
+        .contact-box a{
+            color: blue;
+
+        }
+        .contact-box ul li a{
+            color: #1a1a1a;
+        }
+        .contact-box h6,h4{
+            color: #1a1a1a;
+        }
+
+        .contact-box:hover{
+            transform: translateY(-3px);
+            box-shadow:0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .social-icons li{
+            display:inline-block;
+            margin-right:10px;
+        }
+
+        .social-icons a{
+            font-size:20px;
+            color:#444;
+            transition:0.3s;
+        }
+
+        .social-icons a:hover{
+            color:#e63946;
+        }
+
+        img{
+            margin-top: 100px;
+            width:"100%"; 
+            height:"590px";
+            background-size:contain;
+            border-radius:10px;
+            object-fit:cover;
+        }
+
+        @media(max-width:768px){
+            .bg-img1{
+                height:400px;
+            }
+            main img{
+                width: 100%;
+            }
+        }
+   
+ /* ------------------form part----------------------- */
+.formjs{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    background: #f8f9fa;
+}
+
+
+form{
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 1000px;
+    
+}
+
+form input,form textarea{
+    width: 100%;
+    padding: 12px 15px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    font-size: 16px;
+}
+
+
+textarea{
+    height: 120px;
+    resize: none;
+}
+
+.error{
+    color: red;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+button{
+    width: 100%;
+    background:rgb(78, 141, 193);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    margin-top: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover{
+    background: #c71d2b;
+}
+
+/* -------------------footer------------------- */
+.footer-bg{
+  background-color: #28292a;;
+ }
+
+.footer-First{
+    padding: 80px;
+    text-align: center;
+    font-size: small;
+}
+.footer-First h5,h6{
+  color: white;
+}
+.footer-First p,a{
+  color: gainsboro;
+}
+.footer-First a{
+    text-decoration: none;
+}
+
+.footer-second{
+    padding:30px;
+
+}
+.footer-second a{
+    font-weight: bold;
+    font-size: 12px;
+    text-decoration: none;
+    padding-left: 30px;
+
+}
+.footer-second p{
+    color: gainsboro;
+    margin-top: 5px;
+    font-size: 12px;
+}

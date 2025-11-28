@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        img { width: 300px; border-radius: 8px; }
+    </style>
+</head>
+
+<body>
+
+    <h2>Product Details</h2>
+    <div id="details"></div>
+
+    <script>
+    const params = new URLSearchParams(window.location.search);
+    const id = Number(params.get("id"));
+
+    // REPLACE your old loadDetails() with this one
+    async function loadDetails() {
+    try {
+        const res = await fetch(`http://localhost:3000/products/${id}`);
+        if (!res.ok) throw new Error("Product not found");
+        const p = await res.json();
+
+        document.getElementById("details").innerHTML = `
+            <img src="${p.image}">
+            <h3>${p.name}</h3>
+            <p>Price: ₹${p.price}</p>
+            <p>Category: ${p.category}</p>
+            <p>${p.description}</p>
+            <br>
+            <a href="menu.html">⬅ Back to products</a>
+        `;
+    } catch (err) {
+        document.getElementById("details").innerHTML = "<p>Product not found 😢</p>";
+        console.error(err);
+    }
+}
+
+loadDetails();
+ // call the function
+</script>
+
+
+</body>
+</html>

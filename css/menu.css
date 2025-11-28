@@ -1,0 +1,197 @@
+body {
+            margin: 0;
+            font-family: "Poppins", sans-serif;
+        }
+
+       
+       /* Navbar base */
+.navbar {
+    background-color: #1a1a1a; /* dark background */
+    padding: 0.8rem 1rem;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+/* Brand */
+.navbar .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Nav links */
+.navbar .nav-link {
+    color: #fff;
+    margin-left: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ff6b6b; /* highlight on hover */
+}
+
+/* Active link */
+.navbar .nav-link.active {
+    color: #ff6b6b;
+    font-weight: 700;
+    border-bottom: 2px solid #ff6b6b;
+    padding-bottom: 0.2rem;
+}
+
+/* Wishlist & Cart icons */
+.navbar .nav-link span {
+    background: #ff6b6b;
+    color: #fff;
+    padding: 0 0.4rem;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    margin-left: 0.3rem;
+    font-weight: bold;
+}
+
+/* Navbar collapse button for mobile */
+.navbar .navbar-toggler {
+    border: none;
+    outline: none;
+}
+
+.navbar .navbar-toggler-icon {
+    background-color: #fff;
+    width: 30px;
+    height: 3px;
+    display: block;
+    position: relative;
+}
+
+.navbar .navbar-toggler-icon::before,
+.navbar .navbar-toggler-icon::after {
+    content: "";
+    width: 30px;
+    height: 3px;
+    background-color: #fff;
+    position: absolute;
+    left: 0;
+    transition: all 0.3s;
+}
+
+.navbar .navbar-toggler-icon::before {
+    top: -10px;
+}
+
+.navbar .navbar-toggler-icon::after {
+    top: 10px;
+}
+
+
+        .second{
+            background-image: url('/image/image56.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 500px;
+        }
+        .second h1{
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            padding-top: 250px;
+        }
+        .second a{
+            color: white;
+            text-decoration: none;
+            padding-left: 700px;
+            font-size: 12px;
+        }
+        @media (max-width:768px) {
+            .second{
+                height: 350px;
+            }
+            .second h1{
+                padding-top: 150px;
+            }
+            .second a{
+            padding-left: 240px;
+            }
+        }
+
+
+/* ------------------------------- */
+.count.btn {
+    background-color: red ;
+    color: white;
+    padding: 2px 6px ;
+    font-size: 12px ;
+    border-radius: 50% ;
+    display: inline-block ;
+}
+ 
+
+.controls {
+            padding-top: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+
+ #product-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card img {
+    border-radius: 5px;
+    width: 100%;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.card-body h5 {
+    font-weight: 600;
+}
+
+.card-body p {
+    color: #444;
+    font-size: 18px;
+}
+.wishlist-btn {
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 22px;
+    
+}
+
+
+ .cart-btn {
+    width: 100%;
+    border-radius: 30px;
+    margin-top: 8px;
+    padding: 8px;
+    font-size: 16px;
+    transition: 0.25s;
+}
+
+.cart-btn:hover {
+    background-color: #cce5ff;
+    border-color: #007bff;
+}
+
+
+
+
+
+
+

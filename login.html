@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <script src="/js/login.js"></script>
+   <style>
+     .error{
+        color: red;
+        font-size: 12px;
+     }
+     #error{
+        text-align: center;
+     }
+   </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+    <form id='loginform' action="">
+        <div>
+        <input id="emailInput" type="text" placeholder="enter your email"> 
+         <div class="error" id="emailError"></div>
+        </div>
+
+         <div>
+        <input id="passwordInput" type="text" placeholder="enter password">
+        <div class="error" id="passwordError"></div>
+         </div>
+
+        <div>
+        <button type="submit">Login</button>
+        <div id="error" class="error"></div>
+        <p>Don't have an account? <a href="/sign-up.html">Sign Up</a></p>
+    </div>
+   </form>
+    </div>
+    
+    
+
+    <script>
+      let emailInput=document.getElementById('emailInput');
+      let passwordInput=document.getElementById('passwordInput');
+
+      let emailError=document.getElementById('emailError');
+      let passwordError=document.getElementById('passwordError');
+
+
+      document.getElementById('loginform').addEventListener('submit', (e) => {
+            e.preventDefault();
+            let email = document.getElementById('emailInput').value.trim();
+            let password = document.getElementById('passwordInput').value.trim();
+            let users = JSON.parse(localStorage.getItem('users'))
+
+            let validUser = users.find(u => u.email === email && u.password === password);
+
+            if (validUser) {
+                alert("Login successful!");
+                
+                localStorage.setItem('currentUser', JSON.stringify(validUser));
+
+                 
+                window.location.href = "index.html";
+            } else {
+                document.getElementById('error').textContent = "Incorrect email id or password!";
+            }
+
+        })
+
+      emailInput.addEventListener('input',validateEmail);
+      passwordInput.addEventListener('input',validatePassword);
+
+      function validateEmail(){
+        const email=emailInput.value.trim();
+        if(email===''){
+            emailError.textContent='invalid email'
+            return false;
+        }
+        emailError.textContent="";
+            return true;
+        
+
+      }
+       function validatePassword(){
+        const password=passwordInput.value.trim();
+         if(password===''){
+            passwordError.textContent='invalid password'
+            return false;
+        }
+            passwordError.textContent="";
+            return true;
+      }
+
+
+      
+    </script>
+    
+</body>
+
+</html>

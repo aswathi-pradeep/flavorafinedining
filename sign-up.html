@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <link rel="stylesheet" href="/css/sign-up.css">
+   <script src="/js/signup.js"></script>
+   <style>
+    .error{
+        color: red;
+        font-size: 11px;
+    }
+   </style>
+</head>
+
+<body>
+   <div class="signup-container">
+    <h1>Sign Up</h1>
+     <form id="signupForm" action="">
+        <div>
+        <input id="formName" type="text" name="name" placeholder="enter username">
+         <div class="error"  id="nameError"></div>
+        </div>
+
+        <div>
+        <input id="formEmail" type="text" name="email" placeholder="enter your email">
+        <div class="error" id="emailError"></div>
+        </div>
+
+         <div>
+        <input id="formPhone" type="text"name="phone" placeholder="enter your mobile number">
+        <div class="error" id="phoneError"></div>
+         </div>
+
+         <div>
+        <input id="formPassword" type="text" name="password" placeholder="enter password">
+        <div class="error" id="passwordError"></div>
+         </div>
+        
+
+         <div>
+        <input id="formConfirm" type="text" name="confirmpassword" placeholder="confirm your password">
+        <div class="error" id="confirmError"></div>
+         </div>
+
+        <button id="btn" type="submit">Signup</button>
+        <p>Already have an account? <a href="/login.html">Login</a></p>
+        
+    </form>
+   </div>
+    
+
+   <script>
+    let nameInput=document.getElementById('formName');
+        let emailInput=document.getElementById('formEmail');
+        let phoneInput=document.getElementById('formPhone');
+        let passwordInput=document.getElementById('formPassword');
+        let confirmInput=document.getElementById('formConfirm');
+        
+        let nameError=document.getElementById('nameError');
+        let emailError=document.getElementById('emailError');
+        let phoneError=document.getElementById('phoneError');
+        let passwordError=document.getElementById('passwordError');
+        let confirmError=document.getElementById('confirmError');
+      
+
+
+        nameInput.addEventListener('input',validateName);
+        emailInput.addEventListener('input',validateEmail);
+        phoneInput.addEventListener('input',validatePhone);
+        passwordInput.addEventListener('input',validatePassword);
+        confirmInput.addEventListener('input',validateConfirm);
+
+     
+       document.getElementById('signupForm').addEventListener('submit',(e)=>{
+        e.preventDefault();
+        if(
+            !(validateName()&&
+            validateEmail()&&
+            validatePhone()&&
+            validatePassword()&&
+            validateConfirm())
+        ){
+            return
+        }
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        let email = emailInput.value.trim().toLowerCase();
+        let isUserExists = users.some(u => u.email === email);
+        if(isUserExists){
+           document.getElementById('error').innerText = "User already exists";
+            return;
+          }
+
+       users.push({
+           name: nameInput.value.trim(),
+           email: email,
+           phone: phoneInput.value.trim(),
+           password: passwordInput.value
+        });
+
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Signup successfully");
+    window.location.href = "login.html";
+    document.getElementById("signupForm").reset();
+       });
+
+
+      function validateName(){
+           const name=nameInput.value.trim();
+            if(name===''){
+             nameError.textContent='Name is Required'
+             return false;
+            }
+            if(name.length<3){
+             nameError.textContent='Name must be at least 3 characters'
+             return false;
+            }
+            if(!/^[A-Za-z]+$/.test(name)){
+             nameError.textContent='Only letters (numbers,symbols are not allwed)'
+             return false;
+            }
+             nameError.textContent="";
+            return true;
+        }
+        function validateEmail(){
+            const email=emailInput.value.trim().toLowerCase();
+            if(email===''){
+                emailError.textContent='Email is Required'
+                return false;
+            }
+             if(!/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email)){
+                emailError.textContent='Invalid email(eg:test123@gmail.com)'
+                return false;
+            }
+             emailError.textContent="";
+            return true;
+        }
+        function validatePhone(){
+            const phone=phoneInput.value.trim()
+            if(phone===''){
+                phoneError.textContent='mobile number is required'
+                return false;
+            }
+            if(!/^[6-9]\d{9}$/.test(phone)){
+                phoneError.textContent='Enter a valid 10-digit mobile number'
+                return false;
+            }
+            phoneError.textContent="";
+            return true;
+        }
+        function validatePassword(){
+            const password=passwordInput.value.trim()
+            
+            if(password===''){
+               passwordError.textContent='Password is Required'
+               return false;
+            }
+            if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password)){
+               passwordError.textContent='The password contain atleast 8 characters,1 uppercase,1 lowercase,1 number and 1 special character'
+               return false;
+            }
+             passwordError.textContent="";
+              return true;
+        }
+        function validateConfirm(){
+            const confirm=confirmInput.value.trim()
+            const password=passwordInput.value.trim()
+            if(confirm===''){
+                confirmError.textContent='confirm your password'
+                return false;
+            }
+            if(password!==confirm){
+            confirmError.textContent="incorrect"
+            return false;
+            }
+            confirmError.textContent="";
+              return true;
+        }
+   </script>
+</body>
+
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="/css/cart.css">
+</head>
+<body class="p-4">
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg fixed-top bg-dark">
+    <div class="container">
+        <a class="navbar-brand text-white" href="#"><strong>FLAVORA FINE DINING</strong></a>
+
+        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navMenu">
+             <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="about-us.html">About Us</a></li>
+        <li class="nav-item"><a class="nav-link" href="menu.html">Menu</a></li>
+        <li class="nav-item"><a class="nav-link" href="gallery.html">Gallery</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="wishlist.html">❤️ <span id="wishlist-count">0</span></a></li>
+        <li class="nav-item"><a class="nav-link" href="cart.html">🛒 <span id="cart-count">0</span></a></li>
+      </ul>
+        </div>
+    </div>
+</nav>
+
+<h2 class="mb-4 mt-5 pt-4">🛒 Your Cart</h2>
+<div id="cartContainer"></div>
+
+<script>
+const API = "http://localhost:3000/products";
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+let wishlistHistory = JSON.parse(localStorage.getItem("wishlistHistory")) || [];
+
+// 🔥 Update navbar counts
+function updateNavbarCounts() {
+    document.getElementById("wishlist-count").textContent = wishlist.length;
+    document.getElementById("cart-count").textContent = cart.length;
+}
+
+updateNavbarCounts();
+
+// Load cart items from API
+async function loadCart() {
+    const res = await fetch(API);
+    const products = await res.json();
+
+    if(cart.length === 0){
+        document.getElementById("cartContainer").innerHTML = "<h3 class='text-center'>Your cart is empty 🛒</h3>";
+        return;
+    }
+
+    const cartItems = cart.map(c => {
+        const p = products.find(x => x.id == c.id);
+        return {...p, qty: c.qty};
+    });
+
+    displayCart(cartItems);
+}
+
+// Display cart items
+function displayCart(items) {
+    let grandTotal = 0;
+    let html = `
+        <table class="table">
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Action</th>
+            </tr>`;
+
+    items.forEach(item => {
+        const total = item.price * item.qty;
+        grandTotal += total;
+
+        html += `
+            <tr>
+                <td><img src="${item.image}" width="80"></td>
+                <td>${item.name}</td>
+                <td>₹${item.price}</td>
+                <td>
+                    <button class="btn btn-sm btn-secondary minus" data-id="${item.id}">-</button>
+                    <span class="mx-2">${item.qty}</span>
+                    <button class="btn btn-sm btn-secondary plus" data-id="${item.id}">+</button>
+                </td>
+                <td>₹${total}</td>
+                <td><button class="btn btn-danger remove" data-id="${item.id}">Remove</button></td>
+            </tr>`;
+    });
+
+    html += `
+        <tr>
+            <td colspan="4" class="text-end"><strong>Grand Total:</strong></td>
+            <td><strong>₹${grandTotal}</strong></td>
+            <td></td>
+        </tr>
+        </table>
+
+        <div class="text-end mt-3">
+            <h4>Total Payable: ₹${grandTotal}</h4>
+            <button class="btn btn-success mt-2" id="payBtn">Proceed to Payment</button>
+        </div>`;
+
+    document.getElementById("cartContainer").innerHTML = html;
+
+    setupCartButtons();
+    setupPayment(grandTotal);
+}
+
+// Button actions
+function setupCartButtons() {
+    document.querySelectorAll(".plus").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.id);
+            const item = cart.find(x => x.id === id);
+            item.qty++;
+            saveCart();
+            loadCart();
+        });
+    });
+
+    document.querySelectorAll(".minus").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.id);
+            const item = cart.find(x => x.id === id);
+
+            if(item.qty > 1) item.qty--;
+            else cart = cart.filter(x => x.id !== id);
+
+            saveCart();
+            loadCart();
+        });
+    });
+
+    document.querySelectorAll(".remove").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const id = Number(btn.dataset.id);
+            const product = cart.find(x => x.id === id);
+            cart = cart.filter(x => x.id !== id);
+
+            wishlistHistory.push(`Removed from cart: ${product.name}`);
+            localStorage.setItem("wishlistHistory", JSON.stringify(wishlistHistory));
+
+            saveCart();
+            loadCart();
+        });
+    });
+}
+
+// Save cart to localStorage
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateNavbarCounts();
+}
+
+// Payment simulation
+function setupPayment(amount){
+    const btn = document.getElementById("payBtn");
+    if(!btn) return;
+
+    btn.addEventListener("click", () => {
+        alert(`Payment Successful!\n\nAmount Paid: ₹${amount}\n\nThank you for your purchase ❤️`);
+        cart = [];
+        saveCart();
+        loadCart();
+    });
+}
+
+loadCart();
+</script>
+
+</body>
+</html>
